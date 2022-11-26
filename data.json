@@ -1,0 +1,105 @@
+[
+    {
+        "CategoryId" : "01",
+        "name" : "Toyota Microbus",
+     "picture" :"https://www.toyota.com.gt/hubfs/hiace%202020/general/colores/colores-beige-hiace.png",
+     "location":"Dhaka-1200, Mirpur",
+     "resale_price":15000,
+     "original_price":19000,
+     "useYear":"15-7-2014",
+     "timePost":"11:30",
+     "sellerName":"Abd Al Sakib"
+        },
+    {
+        "CategoryId" : "01",
+        "name" : "Toyota luxury",
+     "picture" :"https://images.hgmsites.net/hug/2020-toyota-century-by-wald-international_100740751_h.jpg",
+     "location":"Dhaka-1200, Mirpur",
+     "resale_price":22000,
+     "original_price":28000,
+     "useYear":"17-8-2016",
+     "timePost":"10:30",
+     "sellerName":"Samad"
+        },
+    {
+        "CategoryId" : "01",
+        "name" : "Toyota electic",
+     "picture" :"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhJ75STI5r6IqJdB0GqtGhPUGoHkMo2c5c6A&usqp=CAU",
+     "location":"Dhaka-1200, Mirpur",
+     "resale_price":18000,
+     "original_price":24000,
+     "useYear":"11-10-2011",
+     "timePost":"11:50",
+     "sellerName":"Tamim"
+        },
+    
+    
+    {
+        "CategoryId" : "02",
+        "name" : "BMW Microbus",
+     "picture" :"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRowPJFi5vA6x-GtbjapF2CUDjo6Kt-i31PMs0y95dn_A&s",
+     "location":"Dhaka-1100, Mirpur",
+     "resale_price":14000,
+     "original_price":18000,
+     "useYear":"12-6-2012",
+     "timePost":"12:00",
+     "sellerName":"Benjamin"
+        },
+    {
+        "CategoryId" : "02",
+        "name" : "BMW luxury ",
+     "picture" :"https://images-stag.jazelc.com/uploads/theautopian-m2en/i7-6.jpg",
+     "location":"Dhaka-1100, Mirpur",
+     "resale_price":19000,
+     "original_price":25000,
+     "useYear":"18-7-2013",
+     "timePost":"11:20",
+     "sellerName":"William"
+        },
+    {
+        "CategoryId" : "02",
+        "name" : "BMW electic",
+     "picture" :"https://stimg.cardekho.com/images/carexteriorimages/930x620/BMW/BMW-i3/1540/1554467107207/front-left-side-47.jpg",
+     "location":"Dhaka-1100, Mirpur",
+     "resale_price":16000,
+     "original_price":20000,
+     "useYear":"19-8-2014",
+     "timePost":"12:20",
+     "sellerName":"James"
+        },
+    
+    
+    {
+        "CategoryId" : "03",
+        "name" : "Nissan Microbus",
+     "picture" :"https://www.nissanbd.com/assets/img/urvan/overview-topimage.jpg",
+     "location":"Dhaka-1200, basundhara",
+     "resale_price":17000,
+     "original_price":23000,
+     "useYear":"12-9-2019",
+     "timePost":"11:00",
+     "sellerName":"Liam"
+        },
+    {
+        "CategoryId" : "03",
+        "name" : "Nissan luxury ",
+     "picture" :"https://content.api.news/v3/images/bin/d1243638efd9d61caf126c60bb12c875",
+     "location":"Dhaka-1200, basundhara",
+     "resale_price":21000,
+     "original_price":27000,
+     "useYear":"18-8-2018",
+     "timePost":"10:20",
+     "sellerName":"Noah"
+        },
+    {
+        "CategoryId" : "03",
+        "name" : "Nissan electic",
+        "picture" :"https://techlekh.com/wp-content/uploads/2019/11/nisan-leaf-price-nepal.png",
+        "location":"Dhaka-1200, basundhara",
+        "resale_price":15000,
+        "original_price":19000,
+        "useYear":"19-4-2017",
+        "timePost":"1:20",
+        "sellerName":"Oliver"
+     }
+    ]
