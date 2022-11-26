@@ -30,7 +30,7 @@ async function run(){
         })
 
         // Getting Cars
-        app.get('/categories/:id', async(req, res)=>{
+        app.get('/category/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {CategoryId:id};
             const result = await carsCollection.find(query).toArray();
