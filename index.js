@@ -27,8 +27,16 @@ function veryfyToken(req, res, next){
     if(!authHeader){
         return res.status(404).send('unauthorized access')
     }
-    const token = authHeader.split(' ')[1]
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded){
+        if(err){
+            return res.status(403).send({message: 'Forbidden access'})
+        }
+        req.decoded = decoded;
+        next()
+    })
 }
+
 async function run(){
     try{
         const categoryCollection = client.db('cars').collection('carCategories');
@@ -70,6 +78,10 @@ async function run(){
         // my booking / my order Get
         app.get('/bookings',veryfyToken, async(req, res)=>{
             const email = req.query.email;
+            const decodedEmail = req.decoded.email;
+            if(email !== decodedEmail){
+                return res.status(403).send({message:'Forbidden Access'})
+            }
             const query = {userEmail: email};
             const result = await bookingCars.find(query).toArray();
             res.send(result)
