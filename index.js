@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
+//JSON web token
+const jwt = require('jsonwebtoken');
+
 // .env file Read
 require('dotenv').config();
 
@@ -15,9 +19,16 @@ app.use(express.json());
 // Database Connected
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.bugesq5.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+//Jwt token veryfy middleware
+function veryfyToken(req, res, next){
+    const authHeader = req.headers.authorization;
+    if(!authHeader){
+        return res.status(404).send('unauthorized access')
+    }
+    const token = authHeader.split(' ')[1]
+}
 async function run(){
     try{
         const categoryCollection = client.db('cars').collection('carCategories');
@@ -57,11 +68,25 @@ async function run(){
         })
 
         // my booking / my order Get
-        app.get('/bookings', async(req, res)=>{
+        app.get('/bookings',veryfyToken, async(req, res)=>{
             const email = req.query.email;
             const query = {userEmail: email};
             const result = await bookingCars.find(query).toArray();
             res.send(result)
+        })
+
+        //access JWT Token
+        app.get('/jwt', async(req, res)=>{
+            const email = req.query.email;
+            const query = {email:email};
+            const user = await userCollection.findOne(query);
+            if(user){
+                const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'1h'});
+                res.send({accessToken: token})
+            }
+            else{
+                res.status(403).send({accessToken:''})
+            }
         })
 
         // All users set database
