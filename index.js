@@ -101,6 +101,13 @@ async function run(){
             }
         })
 
+        //All users get from database
+        app.get('/users', async(req, res)=>{
+            const query = {};
+            const users = await userCollection.find(query).toArray();
+            res.send(users);
+        })
+
         // All users set database
         app.post('/users', async(req, res)=>{
             const user = req.body;
