@@ -54,6 +54,14 @@ async function run(){
             const result = await bookingCars.insertOne(booking);
             res.send(result);
         })
+
+        // my booking / my order Get
+        app.get('/bookings', async(req, res)=>{
+            const email = req.query.email;
+            const query = {userEmail: email};
+            const result = await bookingCars.find(query).toArray();
+            res.send(result)
+        })
     }
     finally{
 
