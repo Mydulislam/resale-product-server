@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 //JSON web token
 const jwt = require('jsonwebtoken');
@@ -93,7 +93,7 @@ async function run(){
             const query = {email:email};
             const user = await userCollection.findOne(query);
             if(user){
-                const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'1h'});
+                const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'10h'});
                 res.send({accessToken: token})
             }
             else{
@@ -114,6 +114,28 @@ async function run(){
             const result = await userCollection.insertOne(user);
             res.send(result)
 
+        })
+
+        // Addmin check
+        app.get('/users/admin/:email', async(req, res)=>{
+            const email = req.params.email;
+            const query = {email};
+            const user = await userCollection.findOne(query);
+            res.send({isAdmin: user?.role === 'admin'});
+        })
+
+        // all buyers
+        app.get('/buyers', async(req, res)=>{
+            const query = {role:'buyer'};
+            const result = await userCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        // all sellers
+        app.get('/sellers', async(req, res)=>{
+            const query = {role:'seller'};
+            const result = await userCollection.find(query).toArray();
+            res.send(result)
         })
     }
     finally{
