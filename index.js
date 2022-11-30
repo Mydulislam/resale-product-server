@@ -43,6 +43,21 @@ async function run(){
         const carsCollection = client.db('cars').collection('carsCollections');
         const bookingCars = client.db('cars').collection('bookingCollection');
         const userCollection = client.db('cars').collection('users');
+
+        //access JWT Token
+        app.get('/jwt', async(req, res)=>{
+            const email = req.query.email;
+            const query = {email:email};
+            const user = await userCollection.findOne(query);
+            if(user){
+                const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'10h'});
+                res.send({accessToken: token})
+            }
+            else{
+                res.status(403).send({accessToken:''})
+            }
+        })
+
         //get categories
         app.get('/categories', async(req, res)=>{
             const query = {};
@@ -76,31 +91,17 @@ async function run(){
         })
 
         // my booking / my order Get
-        app.get('/bookings',veryfyToken, async(req, res)=>{
+        app.get('/bookings', async(req, res)=>{ // ekhane veryfiyTOken ta hobe kintu
             const email = req.query.email;
-            const decodedEmail = req.decoded.email;
-            if(email !== decodedEmail){
-                return res.status(403).send({message:'Forbidden Access'})
-            }
+            // const decodedEmail = req.decoded.email;
+            // if(email !== decodedEmail){
+            //     return res.status(403).send({message:'Forbidden Access'})
+            // }
             const query = {userEmail: email};
             const result = await bookingCars.find(query).toArray();
             res.send(result)
         })
-
-        //access JWT Token
-        app.get('/jwt', async(req, res)=>{
-            const email = req.query.email;
-            const query = {email:email};
-            const user = await userCollection.findOne(query);
-            if(user){
-                const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'10h'});
-                res.send({accessToken: token})
-            }
-            else{
-                res.status(403).send({accessToken:''})
-            }
-        })
-
+        
         //All users get from database
         app.get('/users', async(req, res)=>{
             const query = {};
@@ -116,7 +117,7 @@ async function run(){
 
         })
 
-        // Addmin check
+        // Admin check
         app.get('/users/admin/:email', async(req, res)=>{
             const email = req.params.email;
             const query = {email};
@@ -124,6 +125,22 @@ async function run(){
             res.send({isAdmin: user?.role === 'admin'});
         })
 
+        //Buyers check
+        app.get('/users/buyers/:email', async(req, res)=>{
+            const email = req.params.email;
+            const query = {email};
+            const user = await userCollection.findOne(query);
+            res.send({isBuyer: user?.role === 'buyer'});
+        })
+
+        //Seller check
+        app.get('/users/seller/:email', async(req, res)=>{
+            const email = req.params.email;
+            const query = {email};
+            const user = await userCollection.findOne(query);
+            res.send({isSeller: user?.role === 'seller'});
+        })
+        
         // all buyers
         app.get('/buyers', async(req, res)=>{
             const query = {role:'buyer'};
