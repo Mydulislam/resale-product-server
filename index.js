@@ -152,6 +152,19 @@ async function run(){
 
         })
 
+        // social users set database
+        app.put('/users', async(req, res)=>{
+            const user = req.body;
+            const options = {upsert: true}
+            const updateDoc = {
+                $set:{
+                    role: 'buyer'
+                }
+            }
+            const result = await userCollection.updateOne(user, updateDoc, options);
+            res.send(result)
+        })
+
         // Admin check
         app.get('/users/admin/:email', async(req, res)=>{
             const email = req.params.email;
@@ -224,6 +237,22 @@ async function run(){
         app.get('/addadvertise', async(req, res)=>{
             const query = {};
             const result = await advertiseCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        // admin seller delete
+        app.delete('/seller/:id', async(req,res)=>{
+            const id = req.params.id;
+            const filter = {_id : ObjectId(id)};
+            const result = await userCollection.deleteOne(filter);
+            res.send(result)
+        })
+
+        // admin buyer delete
+        app.delete('/buyer/:id', async(req,res)=>{
+            const id = req.params.id;
+            const filter = {_id : ObjectId(id)};
+            const result = await userCollection.deleteOne(filter);
             res.send(result)
         })
     }
