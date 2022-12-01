@@ -16,11 +16,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database Connected
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.bugesq5.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
 //Jwt token veryfy middleware
 function veryfyToken(req, res, next){
     const authHeader = req.headers.authorization;
@@ -37,12 +32,52 @@ function veryfyToken(req, res, next){
     })
 }
 
+// Database Connected
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.bugesq5.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
 async function run(){
     try{
         const categoryCollection = client.db('cars').collection('carCategories');
         const carsCollection = client.db('cars').collection('carsCollections');
         const bookingCars = client.db('cars').collection('bookingCollection');
         const userCollection = client.db('cars').collection('users');
+        const productCollection = client.db('cars').collection('addProductCollection');
+        const advertiseCollection = client.db('cars').collection('addvertiseProductCollection');
+
+        //veryfy admin
+        const verifyAdmin = async(req, res, next)=>{
+            const decodedEmail = req.decoded.email;
+            const query = {email : decodedEmail};
+            const user = await userCollection.findOne(query);
+            if(user?.role !== 'admin'){
+                return res.status(403).send({message: 'Forbidden access'})
+            }
+            next();
+        }
+
+        //veryfy buyer
+        const verifyBuyer = async(req, res, next)=>{
+            const decodedEmail = req.decoded.email;
+            const query = {email : decodedEmail};
+            const user = await userCollection.findOne(query);
+            if(user?.role !== 'buyer'){
+                return res.status(403).send({message: 'Forbidden access'})
+            }
+            next();
+        }
+
+        //veryfy seller
+        const verifySeller = async(req, res, next)=>{
+            const decodedEmail = req.decoded.email;
+            const query = {email : decodedEmail};
+            const user = await userCollection.findOne(query);
+            if(user?.role !== 'seller'){
+                return res.status(403).send({message: 'Forbidden access'})
+            }
+            next();
+        }
+
 
         //access JWT Token
         app.get('/jwt', async(req, res)=>{
@@ -152,6 +187,43 @@ async function run(){
         app.get('/sellers', async(req, res)=>{
             const query = {role:'seller'};
             const result = await userCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        // add product
+        app.post('/addproducts', async(req, res)=>{
+            const product = req.body;
+            const result = await productCollection.insertOne(product);
+            res.send(result)
+        })
+
+        // get product
+        app.get('/addproducts', async(req, res)=>{
+            const query = {};
+            const product = await productCollection.find(query).toArray();
+            res.send(product)
+        })
+
+        // delete product
+        app.delete('/addproducts/:id', async(req, res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await productCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+        //add addAdvertise
+        app.post('/addadvertise', async(req, res)=>{
+            const advertise = req.body;
+            const result = await advertiseCollection.insertOne(advertise);
+            res.send(result)
+        })
+
+        // get AddAdvertise
+
+        app.get('/addadvertise', async(req, res)=>{
+            const query = {};
+            const result = await advertiseCollection.find(query).toArray();
             res.send(result)
         })
     }
